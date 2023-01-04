@@ -1,0 +1,74 @@
+{
+    "identifier": "be.aben.Rome",
+    "name": "Rome",
+    "organization": "Aben",
+    "description": "Rome support for javascript & typescript",
+    "version": "1.0",
+    "categories": ["issues"],
+    
+    "main": "main.js",
+    
+    "activationEvents": [
+        "onLanguage:javascript",
+        "onLanguage:typescript",
+        "onLanguage:jsx",
+        "onLanguage:tsx",
+        "onWorkspaceContains:package.json"
+    ],
+    
+    "entitlements": {
+       "process": true 
+    },
+    
+    "config": [
+        {
+            "key": "be.aben.rome-path",
+            "title": "Custom path to rome executable",
+            "description": "Setting this disables the automatic lookup of the path to the rome executable",
+            "type": "string",
+        },
+        {
+            "key": "be.aben.rome-format-on-save",
+            "title": "Format on save",
+            "description": "Enable formatting on save",
+            "type": "boolean",
+            "default": false
+        },
+    ],
+    
+    "configWorkspace": [
+        {
+            "key": "be.aben.rome-path",
+            "title": "Custom path to rome executable",
+            "description": "This disables the automatic lookup of the path to the rome executable",
+            "type": "string",
+        },
+        {
+            "key": "be.aben.rome-format-on-save",
+            "title": "Format on save",
+            "description": "Enable formatting on save",
+            "type": "boolean",
+        },
+    ],
+
+    "commands": {
+        "command-palette": [
+           {
+                "title": "Format document",
+                "command": "formatDocument",
+                "filters": {
+                    "syntaxes": ["javascript", "typescript"]
+                }
+           } 
+        ],
+        "editor": [
+           {
+               "title": "Format document",
+               "command": "formatDocument",
+               "filters": {
+                   "syntaxes": ["javascript", "typescript"]
+               }
+           }
+       ] 
+    },
+}
