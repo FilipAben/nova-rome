@@ -1,7 +1,3 @@
-/*
- * TODO: better README + branding
- */
-
 const RomeLint = require('./RomeLint.js');
 const RomeFormat = require('./RomeFormat.js');
 const notify = require('./notify.js');
