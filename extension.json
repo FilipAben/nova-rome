@@ -5,6 +5,8 @@
     "description": "Rome support for javascript & typescript",
     "version": "1.0",
     "categories": ["issues"],
+    "bugs": "https://github.com/FilipAben/nova-rome/issues",
+    "repository": "https://github.com/FilipAben/nova-rome",
     
     "main": "main.js",
     
