@@ -63,11 +63,7 @@ function checkLocalPath() {
             const process = new Process('/usr/bin/env', {
                 args: ['stat', localPath]
             })
-            process.onStderr((value) => {
-                console.log(value);
-            })
             process.onDidExit((value) => {
-                console.log(value)
                 if(value) {
                     res(null);
                 } else {
@@ -112,12 +108,10 @@ function checkGlobalPath() {
 
 async function getRomePath() {
     let path = await checkLocalPath();
-    console.log("Local path", path)
     if(path !== null) {
         return path;
     }
     path = await checkGlobalPath();
-    console.log("Global path", path)
     return path;
 }
 
