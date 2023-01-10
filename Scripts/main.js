@@ -11,10 +11,10 @@ exports.activate = async function () {
         /* registerOnChanged will call the callback with the current value before returning */
         await Config.registerOnChanged('be.aben.rome-path', async (value) => {
             if (!value) {
-                try {
-                    value = await getRomePath();
-                } catch (err) {
-                    notify('rome-path-error', 'Rome path not found', err.message);
+                value = await getRomePath();
+                if(value === null) {
+                    notify('rome-path-error', 'Rome path not found', "");
+                    return;
                 }
             }
             if (!server) {
@@ -31,7 +31,9 @@ exports.activate = async function () {
             }
         });
         await Config.registerOnChanged('be.aben.rome-format-on-save', async (value) => {
-            formatter.onSave = !!value;
+            if(formatter) {
+                formatter.onSave = !!value;
+            }
         });
 
         nova.commands.register('formatDocument', async (obj) => {
@@ -53,8 +55,36 @@ exports.deactivate = function () {
     Config.dispose();
 };
 
-function getRomePath() {
-    return new Promise((res, rej) => {
+function checkLocalPath() {
+     return new Promise((res) => {
+        /* Try to find local rome path in repo */
+        const localPath = `${nova.workspace.path}/node_modules/.bin/rome`;
+        try {
+            const process = new Process('/usr/bin/env', {
+                args: ['stat', localPath]
+            })
+            process.onStderr((value) => {
+                console.log(value);
+            })
+            process.onDidExit((value) => {
+                console.log(value)
+                if(value) {
+                    res(null);
+                } else {
+                    res(localPath)
+                }
+            });
+            process.start();
+   
+        } catch(err) {
+            res(null);
+        }
+    });
+}
+
+function checkGlobalPath() {
+     return new Promise((res) => {
+        /* Try to find global path */
         try {
             const process = new Process('/usr/bin/env', {
                 args: ['type', '-a', 'rome'],
@@ -70,13 +100,24 @@ function getRomePath() {
                 if (result !== null) {
                     res(result);
                 } else {
-                    rej("Didn't find path of the rome executable");
+                    res(null);
                 }
             });
             process.start();
         } catch (err) {
-            rej(`Error while trying to find the rome executable ${err.message}`);
+            res(null);
         }
     });
+}
+
+async function getRomePath() {
+    let path = await checkLocalPath();
+    console.log("Local path", path)
+    if(path !== null) {
+        return path;
+    }
+    path = await checkGlobalPath();
+    console.log("Global path", path)
+    return path;
 }
 

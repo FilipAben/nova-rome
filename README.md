@@ -10,18 +10,10 @@ Rome itself is **not** packaged with the extension. You need to have it installe
 
 ### Path
 
-By default, the extension will try to discover the global Rome path. If this doesn't work, open a terminal and type
+By default, the extension will try to discover the Rome path in 2 ways:
 
-```
-type -a rome
-```
-
-which should return something like 
-
-```
-rome is /opt/homebrew/bin/rome
-```
-depending on your preferred installation method. If this doesn't return the path to Rome, check your installation.
+1. Checking in the node_modules/.bin folder of your workspace
+2. Globally by doing `typa -a rome`, which should return something like `rome is /opt/homebrew/bin/rome` depending on how you installed it. If this doesn't return the path to Rome, check your installation.
 
 In case you have a custom installation, you can always specify the path in either the global or the workspace extension preferences. Workspace settings take precedence over the global settings.
 
