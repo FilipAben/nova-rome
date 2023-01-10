@@ -3,7 +3,7 @@
     "name": "Rome",
     "organization": "Aben",
     "description": "Rome support for javascript & typescript",
-    "version": "1.0",
+    "version": "1.0.1",
     "categories": ["issues"],
     "bugs": "https://github.com/FilipAben/nova-rome/issues",
     "repository": "https://github.com/FilipAben/nova-rome",
