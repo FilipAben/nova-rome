@@ -11,12 +11,13 @@ class RomeFormat {
         this.onSave = onSave;
 
         this.listener = nova.workspace.onDidAddTextEditor((editor) => {
-            if (!this.onSave) {
-                return;
-            }
             /* This callback will also be called for every existing text editor upon initialisation */
             if (this.supportedSyntax.includes(editor.document.syntax)) {
-                editor.onDidSave(this.format);
+                editor.onDidSave((editor) => {
+                    if (this.onSave) {
+                        this.format(editor);
+                    }
+                });
             }
         });
     }
@@ -28,6 +29,7 @@ class RomeFormat {
     async format(editor) {
         const fmt = new Process(this.path, {
             args: ['format', '--stdin-file-path', editor.document.path],
+            cwd: nova.workspace.path,
             stdio: 'pipe',
         });
         let output = '';

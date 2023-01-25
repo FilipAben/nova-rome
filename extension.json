@@ -19,7 +19,8 @@
     ],
     
     "entitlements": {
-       "process": true 
+       "process": true,
+       "filesystem": "readonly"
     },
     
     "config": [
@@ -36,6 +37,11 @@
             "type": "boolean",
             "default": false
         },
+        {
+            "title": "Restart LSP",
+            "type": "command",
+            "command": "be.aben.rome.restartLSP"
+        }
     ],
     
     "configWorkspace": [
@@ -57,7 +63,14 @@
         "command-palette": [
            {
                 "title": "Format document",
-                "command": "formatDocument",
+                "command": "be.aben.rome.formatDocument",
+                "filters": {
+                    "syntaxes": ["javascript", "typescript"]
+                }
+           },
+           {
+                "title": "Restart LSP",
+                "command": "be.aben.rome.restartLSP",
                 "filters": {
                     "syntaxes": ["javascript", "typescript"]
                 }
@@ -66,7 +79,7 @@
         "editor": [
            {
                "title": "Format document",
-               "command": "formatDocument",
+               "command": "be.aben.rome.formatDocument",
                "filters": {
                    "syntaxes": ["javascript", "typescript"]
                }

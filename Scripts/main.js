@@ -1,3 +1,10 @@
+/* TODO:
+ * Lingering rome instances: direct node_modules path?
+ * Option to restart language server
+ * Configuration change watching
+ * Format keeps file as unsaved
+ */
+
 const RomeLint = require('./RomeLint.js');
 const RomeFormat = require('./RomeFormat.js');
 const notify = require('./notify.js');
@@ -12,8 +19,8 @@ exports.activate = async function () {
         await Config.registerOnChanged('be.aben.rome-path', async (value) => {
             if (!value) {
                 value = await getRomePath();
-                if(value === null) {
-                    notify('rome-path-error', 'Rome path not found', "");
+                if (value === null) {
+                    notify('rome-path-error', 'Rome path not found', '');
                     return;
                 }
             }
@@ -31,17 +38,21 @@ exports.activate = async function () {
             }
         });
         await Config.registerOnChanged('be.aben.rome-format-on-save', async (value) => {
-            if(formatter) {
+            if (formatter) {
                 formatter.onSave = !!value;
             }
         });
 
-        nova.commands.register('formatDocument', async (obj) => {
+        nova.commands.register('be.aben.rome.formatDocument', async (obj) => {
             /* either a workspace or a text editor was passed */
             let editor = TextEditor.isTextEditor(obj) ? obj : obj.activeTextEditor;
             if (editor && formatter) {
                 await formatter.format(editor);
             }
+        });
+        nova.commands.register('be.aben.rome.restartLSP', async (obj) => {
+            /* either a workspace or a text editor was passed */
+            server?.restart();
         });
     } catch (err) {
         console.log(err);
@@ -56,30 +67,29 @@ exports.deactivate = function () {
 };
 
 function checkLocalPath() {
-     return new Promise((res) => {
+    return new Promise((res) => {
         /* Try to find local rome path in repo */
-        const localPath = `${nova.workspace.path}/node_modules/.bin/rome`;
+        const localPath = `${nova.workspace.path}/node_modules/@rometools/cli-darwin-arm64/rome`;
         try {
             const process = new Process('/usr/bin/env', {
-                args: ['stat', localPath]
-            })
+                args: ['stat', localPath],
+            });
             process.onDidExit((value) => {
-                if(value) {
+                if (value) {
                     res(null);
                 } else {
-                    res(localPath)
+                    res(localPath);
                 }
             });
             process.start();
-   
-        } catch(err) {
+        } catch (err) {
             res(null);
         }
     });
 }
 
 function checkGlobalPath() {
-     return new Promise((res) => {
+    return new Promise((res) => {
         /* Try to find global path */
         try {
             const process = new Process('/usr/bin/env', {
@@ -108,7 +118,7 @@ function checkGlobalPath() {
 
 async function getRomePath() {
     let path = await checkLocalPath();
-    if(path !== null) {
+    if (path !== null) {
         return path;
     }
     path = await checkGlobalPath();

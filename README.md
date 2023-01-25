@@ -21,3 +21,6 @@ In case you have a custom installation, you can always specify the path in eithe
 
 By default the extension will not format on save. Enable the setting in global or workspace settings.
 
+### Rome configuration
+
+Rome configuration should be stored in a file called `rome.json` in the root of your workspace folder.

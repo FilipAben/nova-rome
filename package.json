@@ -1,0 +1,11 @@
+{
+  "name": "Nova-rome.novaextension",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:FilipAben/nova-rome.git",
+  "author": "Filip Aben <filip@aben.be>",
+  "license": "MIT",
+  "dependencies": {
+    "rome": "^11.0.0"
+  }
+}
