@@ -4,6 +4,7 @@ class RomeFormat {
     onSave = false;
     fixOnSave = false;
     fixSuggestedOnSave = false;
+    triggeredSaves = {};
 
     constructor(path, onSave, fixOnSave, fixSuggestedOnSave) {
         this.path = path;
@@ -27,6 +28,12 @@ class RomeFormat {
     }
 
     async format(editor) {
+        if (this.triggeredSaves[editor.document.path]) {
+            this.triggeredSaves[editor.document.path] = false;
+            console.log('Skip formatting');
+            return;
+        }
+        console.log('Formatting');
         const fmt = new Process(this.path, {
             args: ['format', '--stdin-file-path', editor.document.path],
             cwd: nova.workspace.path,
@@ -34,6 +41,7 @@ class RomeFormat {
         });
         let output = '';
         let range = new Range(0, editor.document.length);
+        let text = editor.getTextInRange(range);
 
         fmt.onStdout((data) => {
             output += data;
@@ -45,13 +53,16 @@ class RomeFormat {
 
         fmt.onDidExit((code) => {
             if (code === 0) {
-                editor.edit((edit) => edit.replace(range, output));
+                if (text !== output) {
+                    editor.edit((edit) => edit.replace(range, output));
+                    this.triggeredSaves[editor.document.path] = true;
+                    editor.save();
+                }
             } else {
                 console.log('Format exited with code', code);
             }
         });
         fmt.start();
-        let text = editor.getTextInRange(range);
         const writer = fmt.stdin.getWriter();
         await writer.ready;
         await writer.write(text);
