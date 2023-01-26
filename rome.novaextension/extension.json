@@ -1,5 +1,5 @@
 {
-    "identifier": "be.aben.Rome",
+    "identifier": "be.aben.rome",
     "name": "Rome",
     "organization": "Aben",
     "description": "Rome support for javascript & typescript",
@@ -36,11 +36,6 @@
             "description": "Enable formatting on save",
             "type": "boolean",
             "default": false
-        },
-        {
-            "title": "Restart LSP",
-            "type": "command",
-            "command": "be.aben.rome.restartLSP"
         }
     ],
     
@@ -57,6 +52,12 @@
             "description": "Enable formatting on save",
             "type": "boolean",
         },
+        {
+            "title": "Restart LSP",
+            "type": "command",
+            "command": "be.aben.rome.restartLSP"
+        }
+
     ],
 
     "commands": {

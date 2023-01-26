@@ -30,10 +30,8 @@ class RomeFormat {
     async format(editor) {
         if (this.triggeredSaves[editor.document.path]) {
             this.triggeredSaves[editor.document.path] = false;
-            console.log('Skip formatting');
             return;
         }
-        console.log('Formatting');
         const fmt = new Process(this.path, {
             args: ['format', '--stdin-file-path', editor.document.path],
             cwd: nova.workspace.path,

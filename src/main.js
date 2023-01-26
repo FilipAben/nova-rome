@@ -1,8 +1,7 @@
 /* TODO:
- * Lingering rome instances: direct node_modules path?
- * Option to restart language server
  * Configuration change watching
- * Format keeps file as unsaved
+ * Bundling + re-organising
+ * Clear LSP configuration before setting new config
  */
 
 const RomeLint = require('./RomeLint.js');
@@ -51,7 +50,6 @@ exports.activate = async function () {
             }
         });
         nova.commands.register('be.aben.rome.restartLSP', async (obj) => {
-            /* either a workspace or a text editor was passed */
             server?.restart();
         });
     } catch (err) {
@@ -66,10 +64,22 @@ exports.deactivate = function () {
     Config.dispose();
 };
 
-function checkLocalPath() {
+async function getArch() {
+    return new Promise((res) => {
+        var process = new Process('/usr/bin/uname', { args: ['-m'] });
+        process.onStdout((line) => {
+            cpu = line.trim();
+            res(cpu);
+        });
+        process.start();
+    });
+}
+
+async function checkLocalPath() {
+    const arch = await getArch();
     return new Promise((res) => {
         /* Try to find local rome path in repo */
-        const localPath = `${nova.workspace.path}/node_modules/@rometools/cli-darwin-arm64/rome`;
+        const localPath = `${nova.workspace.path}/node_modules/@rometools/cli-darwin-${arch}/rome`;
         try {
             const process = new Process('/usr/bin/env', {
                 args: ['stat', localPath],
