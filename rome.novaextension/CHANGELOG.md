@@ -11,3 +11,4 @@ Add support for discovering rome path in workspace node_modules
 * Format on save doesn't leave files as unsaved anymore
 * Fixed lingering rome instances when LSP was restarted
 * Map rome.json configuration to LSP
+* Add debug option

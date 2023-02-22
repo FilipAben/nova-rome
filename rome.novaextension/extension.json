@@ -3,7 +3,7 @@
     "name": "Rome",
     "organization": "Aben",
     "description": "Rome support for javascript & typescript",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "categories": ["issues"],
     "bugs": "https://github.com/FilipAben/nova-rome/issues",
     "repository": "https://github.com/FilipAben/nova-rome",
@@ -56,8 +56,12 @@
             "title": "Restart LSP",
             "type": "command",
             "command": "be.aben.rome.restartLSP"
+        },
+        {
+            "key": "be.aben.rome-enable-debug",
+            "title": "Enable debug",
+            "type": "boolean",
         }
-
     ],
 
     "commands": {

@@ -3,6 +3,7 @@ class RomeFormat {
     supportedSyntax = ['javascript', 'typescript'];
     onSave = false;
     fixOnSave = false;
+    debug = false;
     fixSuggestedOnSave = false;
     triggeredSaves = {};
 
@@ -46,7 +47,7 @@ class RomeFormat {
         });
 
         fmt.onStderr((error) => {
-            console.log(error);
+            this.debug && console.log(error);
         });
 
         fmt.onDidExit((code) => {
@@ -57,7 +58,7 @@ class RomeFormat {
                     editor.save();
                 }
             } else {
-                console.log('Format exited with code', code);
+                this.debug && console.log('Format exited with code', code);
             }
         });
         fmt.start();

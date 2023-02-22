@@ -14,6 +14,7 @@ const flattenJSON = (obj = {}, res = {}, extraKey = '') => {
 class RomeLint {
     client = null;
     path = null;
+    debug = false;
     dispose = [];
     constructor(path) {
         this.path = path;
@@ -45,7 +46,7 @@ class RomeLint {
                 path: this.path,
                 args: ['lsp-proxy'],
             },
-            { syntaxes: ['javascript', 'typescript'] },
+            { syntaxes: ['javascript', 'typescript'], debug: this.debug },
         );
         this.dispose.push(
             this.client.onDidStop(() => {
